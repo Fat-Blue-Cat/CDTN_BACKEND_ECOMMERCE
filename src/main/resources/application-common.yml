@@ -1,0 +1,30 @@
+# CONFIGURATION FOR MAIL
+spring:
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: trungvip00002@gmail.com # YOUR EMAIL
+    password: sbqjjeygewsppodj # YOUR PASSWORD
+    port: '587'
+ # CONFIGURATION FOR OAUTH2
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-secret: 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 # YOUR CLIENT SECRET
+            client-id: 275395417575-9g7dafj80dhbg3ssrpr36eue705215cb.apps.googleusercontent.com
+#            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+# CONFÌGURATION FOR JWT
+app:
+  app-jwt-expiration-milliseconds: '21440000' # 24 hours
+  jwt-secret: daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb # YOUR JWT SECRET
+  app-jwt-renewal-milliseconds: '604800000' # 7 days
+
+
+
