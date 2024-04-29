@@ -2,15 +2,21 @@ package org.example.ecommerceweb.security;
 
 
 import lombok.AllArgsConstructor;
+import org.example.ecommerceweb.security.oauth2.CustomOAuth2UserService;
+import org.example.ecommerceweb.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import org.example.ecommerceweb.security.oauth2.OAuth2AuthenticationFailureHandler;
+import org.example.ecommerceweb.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,7 +31,19 @@ import java.util.Arrays;
 @Configuration // DEFINE BEAN
 @AllArgsConstructor
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 public class SpringSecurityConfig {
+    private final CustomOAuth2UserService customOAuth2UserService;
+//
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+//
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -40,11 +58,22 @@ public class SpringSecurityConfig {
     SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint((request, response, authException) -> response.sendError(401))
+                )
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/api/user/**").authenticated();
                     authorize.requestMatchers("/api/admin/**").authenticated();
                     authorize.anyRequest().permitAll();
-                }).oauth2Login(Customizer.withDefaults());
+                })
+//                .oauth2Login(Customizer.withDefaults());
+                .oauth2Login(oauth2 -> oauth2.authorizationEndpoint(
+                                endpoint -> endpoint.baseUri("/oauth2/authorize").authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                        ).redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/oauth2/callback/*"))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)).successHandler(oAuth2AuthenticationSuccessHandler).failureHandler(oAuth2AuthenticationFailureHandler));
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -56,6 +85,11 @@ public class SpringSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
     // CONFIGURE CORS FOR ALL ORIGINS

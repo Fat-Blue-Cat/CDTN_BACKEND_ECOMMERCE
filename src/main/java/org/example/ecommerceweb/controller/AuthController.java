@@ -23,24 +23,37 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReqDto loginDto) {
-          try {
-              JwtAuthDto jwtAuthDto = authService.login(loginDto);
-              return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
-          }catch (Exception e){
-              return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-          }
+        try {
+            JwtAuthDto jwtAuthDto = authService.login(loginDto);
+            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
+//              User user = authService.loginReturnUser(loginDto);
+//              return new ResponseEntity<>(user,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignupReqDto signupDto) {
         try {
-            JwtAuthDto jwtAuthDto = authService.signUp(signupDto);
-            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
+//            JwtAuthDto jwtAuthDto = authService.signUp(signupDto);
+//            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
+            User user = authService.SignupReturnUser(signupDto);
+            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+    }
+
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUSerProfileHandler(
+            @RequestHeader(value = "Authorization") String jwt
+    )throws Exception{
+        User user = authService.findUserByJwt(jwt);
+        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
 //    @GetMapping("/user")

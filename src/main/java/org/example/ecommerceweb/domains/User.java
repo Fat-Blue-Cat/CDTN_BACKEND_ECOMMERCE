@@ -52,5 +52,12 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> addresses;
 
+    @Column(name = "role")
+    private String role = "USER";
+
+    private AuthProvider provider;
+
+    private String providerId;
+
 
 }
