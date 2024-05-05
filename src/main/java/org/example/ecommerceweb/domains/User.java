@@ -1,5 +1,6 @@
 package org.example.ecommerceweb.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,6 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-//    @SequenceGenerator(
-//            name = "answer_seq",
-//            sequenceName = "answer_seq",
-//            allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -49,11 +45,14 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> addresses;
 
-    @Column(name = "role")
-    private String role = "USER";
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ReviewsRatings> reviewsRatings;
 
     private AuthProvider provider;
 
