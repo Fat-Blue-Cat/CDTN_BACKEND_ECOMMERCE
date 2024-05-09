@@ -3,7 +3,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ep-shrill-truth-a1tzyu0n.ap-southeast-1.aws.neon.tech/cosmeticweb0702?sslmode=require
+    url: jdbc:postgresql://ep-shrill-truth-a1tzyu0n.ap-southeast-1.aws.neon.tech/ecommerce010702?sslmode=require
     username: cosmeticweb0702_owner
     password: weUa5Ep1hVzc
   jpa:

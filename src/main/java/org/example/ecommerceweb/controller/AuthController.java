@@ -1,6 +1,7 @@
 package org.example.ecommerceweb.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.JwtAuthDto;
 import org.example.ecommerceweb.dto.req.LoginReqDto;
 import org.example.ecommerceweb.dto.req.SignupReqDto;
@@ -23,14 +24,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReqDto loginDto) {
-        try {
-            JwtAuthDto jwtAuthDto = authService.login(loginDto);
-            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
+          try {
+              JwtAuthDto jwtAuthDto = authService.login(loginDto);
+              return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
 //              User user = authService.loginReturnUser(loginDto);
 //              return new ResponseEntity<>(user,HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+          }catch (Exception e){
+              return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+          }
     }
 
 
@@ -54,6 +55,16 @@ public class AuthController {
     )throws Exception{
         User user = authService.findUserByJwt(jwt);
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email){
+        try {
+
+            return new ResponseEntity<>( authService.forgotPassword(email),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 //    @GetMapping("/user")

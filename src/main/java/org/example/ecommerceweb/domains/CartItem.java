@@ -42,8 +42,8 @@ public class CartItem {
     @JoinColumn(name = "product_skus_id")
     private ProductSkus productSkus;
 
-    @JsonIgnore
-    private Long userId;
+//    @JsonIgnore
+//    private Long userId;
 
 
 }

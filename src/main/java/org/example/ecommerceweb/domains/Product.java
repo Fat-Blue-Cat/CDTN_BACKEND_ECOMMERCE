@@ -25,7 +25,7 @@ public class Product {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
 
@@ -62,10 +62,13 @@ public class Product {
     private List<ReviewsRatings> reviewsRatings;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<Options> options = new HashSet<>();
+    private List<Options> options;
 
+//    @JsonIgnore
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<ProductSkus> productSkus = new HashSet<>();
+    private List<ProductSkus> productSkus;
+
+
 
 
 }

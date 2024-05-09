@@ -10,6 +10,7 @@ import org.example.ecommerceweb.domains.keys.KeySkuValues;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "sku_values")
 public class SkuValues {
     @EmbeddedId

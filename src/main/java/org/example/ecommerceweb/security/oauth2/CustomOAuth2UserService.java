@@ -2,8 +2,10 @@ package org.example.ecommerceweb.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.domains.AuthProvider;
+import org.example.ecommerceweb.domains.Cart;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.exceptions.OAuth2AuthenticationProcessingException;
+import org.example.ecommerceweb.repository.CartRepository;
 import org.example.ecommerceweb.repository.UserRepository;
 import org.example.ecommerceweb.security.UserPrincipal;
 import org.example.ecommerceweb.security.oauth2.user.OAuth2UserInfo;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
 
     @Override
@@ -68,12 +71,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
         user.setCreatedAt(new Date());
-        user.setRole("ROLE_USER");
+//        user.setRole("ROLE_USER");
         user.setProviderId(oAuth2UserInfo.getId());
         user.setUserName(oAuth2UserInfo.getName());
         user.setEmailAddress(oAuth2UserInfo.getEmail());
         user.setProvider(AuthProvider.google);
-        return userRepository.save(user);
+        User userSaved = userRepository.save(user);
+        Cart cart = new Cart();
+        cart.setUser(userSaved);
+        cartRepository.save(cart);
+        return userSaved;
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

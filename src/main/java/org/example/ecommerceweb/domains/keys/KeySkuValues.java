@@ -1,12 +1,10 @@
 package org.example.ecommerceweb.domains.keys;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.example.ecommerceweb.domains.OptionValues;
 import org.example.ecommerceweb.domains.Options;
 import org.example.ecommerceweb.domains.Product;
@@ -19,11 +17,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class KeySkuValues implements Serializable {
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "product_sku_id", referencedColumnName = "id")
     })
+    @JsonIgnore
     private ProductSkus sku;
 
 //    @ManyToOne
@@ -34,10 +34,12 @@ public class KeySkuValues implements Serializable {
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
             @JoinColumn(name = "option_id", referencedColumnName = "id")
     })
     private Options option;
+
+    @Column(name = "product_id")
+    private Long productId;
 
 
 

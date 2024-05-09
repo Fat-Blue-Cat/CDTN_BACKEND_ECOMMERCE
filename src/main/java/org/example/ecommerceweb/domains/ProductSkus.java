@@ -1,5 +1,6 @@
 package org.example.ecommerceweb.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,8 @@ public class ProductSkus {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JsonIgnore
+    @JoinColumn(name = "product_id")
     private Product product;
 
 
@@ -35,8 +37,11 @@ public class ProductSkus {
     @Column(name = "quantity")
     private int quantity;
 
-    @OneToMany(mappedBy = "productSkus")
-    private Set<CartItem> cartItems = new HashSet<>();
+    @OneToMany(mappedBy = "key.sku", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<SkuValues> skuValues;
 
+    @OneToMany
+    @JsonIgnore
+    private Set<CartItem> cartItems = new HashSet<>();
 
 }

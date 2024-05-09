@@ -1,5 +1,6 @@
 package org.example.ecommerceweb.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,18 +21,26 @@ public class OptionValues {
     private Long id;
 
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
             @JoinColumn(name = "option_id", referencedColumnName = "id")
     })
     private Options option;
+
+    @Column(name = "product_id")
+    private Long productId;
+//
+//    @Column(name="product_id")
+//    private Long productId;
 
 
     @Column(name = "value")
     private String value;
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "optionValues", cascade = CascadeType.ALL)
+    private List<SkuValues> skuValuesList;
 
 
 
