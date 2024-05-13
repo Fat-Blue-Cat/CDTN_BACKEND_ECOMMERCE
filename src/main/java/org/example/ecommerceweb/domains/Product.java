@@ -69,6 +69,11 @@ public class Product {
     private List<ProductSkus> productSkus;
 
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "likedProducts")
+    Set<User> likes;
+
+
 
 
 }

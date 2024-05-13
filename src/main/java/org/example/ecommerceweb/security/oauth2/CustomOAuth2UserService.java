@@ -1,11 +1,14 @@
 package org.example.ecommerceweb.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ecommerceweb.commons.Constant;
 import org.example.ecommerceweb.domains.AuthProvider;
 import org.example.ecommerceweb.domains.Cart;
+import org.example.ecommerceweb.domains.Role;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.exceptions.OAuth2AuthenticationProcessingException;
 import org.example.ecommerceweb.repository.CartRepository;
+import org.example.ecommerceweb.repository.RoleRepository;
 import org.example.ecommerceweb.repository.UserRepository;
 import org.example.ecommerceweb.security.UserPrincipal;
 import org.example.ecommerceweb.security.oauth2.user.OAuth2UserInfo;
@@ -28,6 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
+    private final RoleRepository roleRepository;
 
 
     @Override
@@ -70,8 +74,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
+        Role role = roleRepository.findByRoleName(Constant.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
         user.setCreatedAt(new Date());
-//        user.setRole("ROLE_USER");
+        user.setRole(role);
         user.setProviderId(oAuth2UserInfo.getId());
         user.setUserName(oAuth2UserInfo.getName());
         user.setEmailAddress(oAuth2UserInfo.getEmail());

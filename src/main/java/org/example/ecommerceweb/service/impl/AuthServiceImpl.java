@@ -2,11 +2,14 @@ package org.example.ecommerceweb.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.ecommerceweb.commons.Constant;
+import org.example.ecommerceweb.domains.Role;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.JwtAuthDto;
 import org.example.ecommerceweb.dto.req.LoginReqDto;
 import org.example.ecommerceweb.dto.req.SignupReqDto;
 import org.example.ecommerceweb.repository.CartRepository;
+import org.example.ecommerceweb.repository.RoleRepository;
 import org.example.ecommerceweb.repository.UserRepository;
 import org.example.ecommerceweb.service.AuthService;
 import org.example.ecommerceweb.service.CartService;
@@ -38,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final CartRepository cartRepository;
     private final CartService cartService;
     private final EmailService emailService;
+    private final RoleRepository roleRepository;
 
     @Override
     public JwtAuthDto login(LoginReqDto loginReqDto) {
@@ -54,9 +58,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtAuthDto signUp(SignupReqDto signupReqDto) throws Exception {
-
         boolean isExistMail = userRepository.existsByEmailAddress(signupReqDto.getEmail());
         boolean isExistUserName = userRepository.existsByUserName(signupReqDto.getUsername());
+
+        Role role = roleRepository.findByRoleName(Constant.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
         if(isExistMail || isExistUserName) throw new Exception("Email or UserName is Already used with another account");
         User user =User.builder().userName(signupReqDto.getUsername())
@@ -64,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(signupReqDto.getFirstName())
                 .lastName(signupReqDto.getLastName())
                 .password(passwordEncoder.encode(signupReqDto.getPassword()))
+                .role(role)
                 .createdAt(new Date())
                 .build();
 

@@ -38,10 +38,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignupReqDto signupDto) {
         try {
-//            JwtAuthDto jwtAuthDto = authService.signUp(signupDto);
-//            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
-            User user = authService.SignupReturnUser(signupDto);
-            return new ResponseEntity<>(user,HttpStatus.OK);
+            JwtAuthDto jwtAuthDto = authService.signUp(signupDto);
+            return new ResponseEntity<>(jwtAuthDto,HttpStatus.OK);
+//            User user = authService.SignupReturnUser(signupDto);
+//            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 

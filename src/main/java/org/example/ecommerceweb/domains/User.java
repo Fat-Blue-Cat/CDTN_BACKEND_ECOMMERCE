@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Domain user management
@@ -58,5 +59,16 @@ public class User {
 
     private String providerId;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    Set<Product> likedProducts;
 
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }

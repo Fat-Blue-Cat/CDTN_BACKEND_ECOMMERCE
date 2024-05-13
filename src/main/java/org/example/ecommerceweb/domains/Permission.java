@@ -1,10 +1,14 @@
 package org.example.ecommerceweb.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "permissions")
@@ -22,6 +26,9 @@ public class Permission {
     @Column(name = "permission_name")
     private String permissionName;
 
+    @Column(name = "alternative_name")
+    private String alternativeName;
+
     @Column(name = "create_permission")
     private Boolean createPermission;
 
@@ -34,7 +41,7 @@ public class Permission {
     @Column(name = "delete_permission")
     private Boolean deletePermission;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
+    private Set<Role> roles = new HashSet<>();
 }

@@ -9,4 +9,18 @@ public class Constant {
     public static final String ORDER_CANCELLED = "CANCELLED";
     public static final String ORDER_COMPLETED = "COMPLETED";
 
+
+    public static final String PERMISSION_MANAGER_PRODUCT = "MANAGE_PRODUCT";
+    public static final String PERMISSION_MANAGER_CATEGORY = "MANAGE_CATEGORY";
+    public static final String PERMISSION_MANAGER_ORDER = "MANAGE_ORDER";
+    public static final String PERMISSION_MANAGER_COUPON = "MANAGE_COUPON";
+    public static final String PERMISSION_MANAGER_USER = "MANAGE_USER";
+    public static final String PERMISSION_MANAGER_ROLE = "MANAGE_ROLE";
+    public static final String PERMISSION_MANAGER_BRAND = "MANAGE_BRAND";
+    public static final String PERMISSION_MANAGER_REVENUE = "MANAGE_REVENUE";
+    public static final String PERMISSION_ADMIN = "PERMISSION_ADMIN";
+
+
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_USER = "ROLE_USER";
 }
