@@ -12,5 +12,5 @@ import lombok.Setter;
 public class AddItemRequestDto {
     private Long productSkuId;
     private int quantity;
-    private Double price;
+//    private Double price;
 }

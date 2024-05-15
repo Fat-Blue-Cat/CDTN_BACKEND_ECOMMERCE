@@ -31,10 +31,10 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItems = new HashSet<>();
 
         for (CartItem item: cart.getCartItems()){
-            OrderItem orderItem = OrderItem.builder().price(item.getPrice())
+            OrderItem orderItem = OrderItem.builder().price(item.getProductSkus().getPrice())
                     .quantity(item.getQuantity())
-                    .discount(item.getDiscount())
-                    .discountedPrice(item.getDiscountedPrice())
+                    .discount(item.getProductSkus().getProduct().getDiscountPercent())
+                    .discountedPrice(item.getProductSkus().getPrice()*item.getQuantity()*(1 - Double.valueOf(item.getProductSkus().getProduct().getDiscountPercent())/100))
                     .productSkus(item.getProductSkus())
                     .build();
 
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderItems(orderItems)
                 .orderStatus(Constant.ORDER_PENDING)
                 .orderDate(LocalDate.now())
-                .TotalDiscount(cart.getTotalDiscount())
+//                .TotalDiscount(cart.getTotalDiscount())
                 .TotalPrice(cart.getTotalPrice())
                 .TotalItem(cart.getTotalItem())
                 .address(shippAddress)

@@ -32,10 +32,11 @@ public class OrderController {
 
     }
 
-    @GetMapping("/history/{userId}")
-    public ResponseEntity<?> getOrderHistory(@PathVariable Long userId) {
+    @GetMapping("/history")
+    public ResponseEntity<?> getOrderHistory(@RequestHeader(value = "Authorization") String jwt) {
         try{
-            return new ResponseEntity<>(orderService.usersOrderHistory(userId), HttpStatus.OK);
+            User user = authService.findUserByJwt(jwt);
+            return new ResponseEntity<>(orderService.usersOrderHistory(user.getId()), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

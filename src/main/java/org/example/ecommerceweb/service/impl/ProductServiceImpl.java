@@ -233,7 +233,7 @@ public class ProductServiceImpl implements ProductService {
 //                .sorted(Comparator.comparing(Options::getId)) // Sort by type in ascending order
 //                .collect(Collectors.toList());
         List<Options> sortedList = product.getOptions().stream()
-                .sorted((obj1, obj2) -> obj2.getId().compareTo(obj1.getId()))
+                .sorted((obj1, obj2) -> obj1.getId().compareTo(obj2.getId()))
                 .collect(Collectors.toList());
 
 

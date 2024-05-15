@@ -21,14 +21,14 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Double price;
+//    @Column(name = "price")
+//    private Double price;
 
-    @Column(name = "discount")
-    private Integer discount;
+//    @Column(name = "discount")
+//    private Integer discount;
 
-    @Column(name = "discounted_price")
-    private Double discountedPrice;
+//    @Column(name = "discounted_price")
+//    private Double discountedPrice;
 
 
     

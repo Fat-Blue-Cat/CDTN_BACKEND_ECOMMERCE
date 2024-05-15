@@ -27,8 +27,8 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new Exception("CartItem not found with id: "+cartItemId));
         Product product = cartItem.getProductSkus().getProduct();
         cartItem.setQuantity(quantity);
-        cartItem.setPrice(price * quantity);
-        cartItem.setDiscountedPrice(price * (1 - Double.valueOf( product.getDiscountPercent())/100) * quantity);
+//        cartItem.setPrice(price * quantity);
+//        cartItem.setDiscountedPrice(price * (1 - Double.valueOf( product.getDiscountPercent())/100) * quantity);
 
 
         return cartItemRepository.save(cartItem);

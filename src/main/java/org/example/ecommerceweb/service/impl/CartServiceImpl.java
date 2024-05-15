@@ -41,16 +41,16 @@ public class CartServiceImpl implements CartService {
                     .cart(cart)
                     .productSkus(productSkus)
                     .quantity(req.getQuantity())
-                    .price(req.getPrice() * req.getQuantity())
-                    .discount(productSkus.getProduct().getDiscountPercent())
-                    .discountedPrice(req.getPrice()* req.getQuantity()*(1 - Double.valueOf(productSkus.getProduct().getDiscountPercent())/100))
+//                    .price(productSkus.getPrice() * req.getQuantity())
+//                    .discount(productSkus.getProduct().getDiscountPercent())
+//                    .discountedPrice(req.getPrice()* req.getQuantity()*(1 - Double.valueOf(productSkus.getProduct().getDiscountPercent())/100))
                     .build();
             CartItem createCartItem = cartItemService.createCartItem(cartItem);
 
         }else{
             isPresent.setQuantity(isPresent.getQuantity() + req.getQuantity());
-            isPresent.setPrice(isPresent.getPrice() + req.getPrice() * req.getQuantity());
-            isPresent.setDiscountedPrice(isPresent.getDiscountedPrice() + (req.getPrice()*req.getQuantity()*(1 - Double.valueOf(productSkus.getProduct().getDiscountPercent())/100)));
+//            isPresent.setPrice(isPresent.getPrice() + req.getPrice() * req.getQuantity());
+//            isPresent.setDiscountedPrice(isPresent.getDiscountedPrice() + (req.getPrice()*req.getQuantity()*(1 - Double.valueOf(productSkus.getProduct().getDiscountPercent())/100)));
             cartItemRepository.save(isPresent);
         }
 
@@ -67,15 +67,15 @@ public class CartServiceImpl implements CartService {
         int totalItem =0;
 
         for (CartItem cartItem : cart.getCartItems()){
-            totalPrice = totalPrice + cartItem.getPrice();
-            totalDiscountedPrice =totalDiscountedPrice + cartItem.getDiscountedPrice();
+            totalPrice = totalPrice + cartItem.getProductSkus().getPrice() * cartItem.getQuantity();
+            totalDiscountedPrice =totalDiscountedPrice + cartItem.getProductSkus().getPrice() * cartItem.getQuantity()* (1 - Double.valueOf(cartItem.getProductSkus().getProduct().getDiscountPercent())/100);
             totalItem = totalItem +cartItem.getQuantity();
         }
 
         cart.setTotalDiscountedPrice(totalDiscountedPrice);
         cart.setTotalItem(totalItem);
         cart.setTotalPrice(totalPrice);
-        cart.setTotalDiscount(totalPrice-totalDiscountedPrice);
+//        cart.setTotalDiscount(totalPrice-totalDiscountedPrice);
         cartRepository.save(cart);
 
         return cart;
@@ -86,7 +86,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findByUserId(userId);
         if (cart != null) {
             cart.getCartItems().clear();
-            cart.setTotalDiscount(0d);
+//            cart.setTotalDiscount(0d);
             cart.setTotalDiscountedPrice(0d);
             cart.setTotalItem(0);
             cart.setTotalPrice(0d);

@@ -25,8 +25,8 @@ public class Order {
     @Column(name="total_price")
     private Double TotalPrice;
 
-    @Column(name="total_discount")
-    private Double TotalDiscount;
+//    @Column(name="total_discount")
+//    private Double TotalDiscount;
 
     @Column(name="total_discouted_price")
     private Double TotalDiscountedPrice;
@@ -48,4 +48,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    private Coupons coupons;
 }
