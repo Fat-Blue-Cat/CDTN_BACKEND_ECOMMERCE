@@ -38,6 +38,12 @@ public class Order {
     @Column(name="order_status")
     private String orderStatus;
 
+    @Column(name="payment_status")
+    private String paymentStatus;
+
+    @Column(name="payment_method")
+    private String paymentMethod;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -24,9 +24,15 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final AddressRepository addressRepository;
     private final ProductSkusRepository productSkusRepository;
+    private final CouponRepository couponRepository;
 
     @Override
-    public Order createOrder(User user, Address shippAddress) {
+    public Order createOrder(User user, Address shippAddress,Long couponId) {
+        if(couponId == null){
+            couponId = 0L;
+        }
+        Coupons coupons = couponRepository.findById(couponId).orElse(null);
+
         Cart cart = cartService.findUserCart(user.getId());
         Set<OrderItem> orderItems = new HashSet<>();
 
@@ -52,16 +58,28 @@ public class OrderServiceImpl implements OrderService {
             productSkusRepository.save(productSkus);
             productRepository.save(product);
         }
+       if(coupons != null){
+           if(cart.getTotalDiscountedPrice() <= coupons.getDiscountValue()){
+               cart.setTotalDiscountedPrice(0.0);
+           }else {
+               cart.setTotalDiscountedPrice(cart.getTotalDiscountedPrice() - coupons.getDiscountValue());
+           }
+           coupons.setTimesUsed(coupons.getTimesUsed() + 1);
+          couponRepository.save(coupons);
+        }
 
         Order createOrder = Order.builder()
                 .user(user)
                 .orderItems(orderItems)
                 .orderStatus(Constant.ORDER_PENDING)
                 .orderDate(LocalDate.now())
+//                .paymentStatus(Constant.PAYMENT_PENDING)
+//                .paymentMethod(Constant.PAYMENT_DELIVERY)
 //                .TotalDiscount(cart.getTotalDiscount())
                 .TotalPrice(cart.getTotalPrice())
                 .TotalItem(cart.getTotalItem())
                 .address(shippAddress)
+                .coupons(coupons)
                 .TotalDiscountedPrice(cart.getTotalDiscountedPrice())
                 .build();
 
@@ -97,6 +115,8 @@ public class OrderServiceImpl implements OrderService {
     public Order placedOrder(Long orderId)  {
         Order order = orderRepository.findById(orderId).get();
         order.setOrderStatus(Constant.ORDER_PLACED);
+        order.setPaymentStatus(Constant.PAYMENT_PENDING);
+        order.setPaymentMethod(Constant.PAYMENT_DELIVERY);
 //        order.getPaymentDetails().setStatus("COMPLETED");
         orderRepository.save(order);
         return order;

@@ -9,6 +9,12 @@ public class Constant {
     public static final String ORDER_CANCELLED = "CANCELLED";
     public static final String ORDER_COMPLETED = "COMPLETED";
 
+    public static final String PAYMENT_PENDING = "PENDING";
+    public static final String PAYMENT_SUCCESS = "SUCCESS";
+    public static final String PAYMENT_FAILED = "FAILED";
+
+    public static final String PAYMENT_CASH = "CASH";
+    public static final String PAYMENT_DELIVERY = "DELIVERY";
 
     public static final String PERMISSION_MANAGER_PRODUCT = "MANAGE_PRODUCT";
     public static final String PERMISSION_MANAGER_CATEGORY = "MANAGE_CATEGORY";

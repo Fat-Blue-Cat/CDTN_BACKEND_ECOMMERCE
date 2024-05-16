@@ -21,11 +21,21 @@ public class OrderController {
     private final AddressService addressService;
 
     @PutMapping("/create/{addressId}")
-    public ResponseEntity<?> createOrder(@RequestHeader(value = "Authorization") String jwt, @PathVariable Long addressId) {
+    public ResponseEntity<?> createOrder(@RequestHeader(value = "Authorization") String jwt, @PathVariable Long addressId, @RequestParam(required = false) Long couponId) {
         try{
             User user = authService.findUserByJwt(jwt);
             Address address =addressService.getAddress(addressId);
-            return new ResponseEntity<>(orderService.createOrder(user,address), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.createOrder(user,address,couponId), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PutMapping("/place/{orderId}")
+    public ResponseEntity<?> placeOrder(@PathVariable Long orderId) {
+        try{
+            return new ResponseEntity<>(orderService.placedOrder(orderId), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

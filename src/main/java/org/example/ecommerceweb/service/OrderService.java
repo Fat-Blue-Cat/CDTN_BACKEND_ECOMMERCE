@@ -8,7 +8,7 @@ import org.example.ecommerceweb.exceptions.OrderException;
 import java.util.List;
 
 public interface OrderService {
-    public Order createOrder(User user, Address address);
+    public Order createOrder(User user, Address address, Long couponId) throws OrderException;
 
     public Order findOrderById(Long orderId) throws OrderException;
 
