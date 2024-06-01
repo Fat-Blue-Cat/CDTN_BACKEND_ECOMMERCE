@@ -1,11 +1,12 @@
 package org.example.ecommerceweb.service.impl;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.domains.Product;
 import org.example.ecommerceweb.domains.ReviewsRatings;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.req.ReviewsRatingsReq;
+import org.example.ecommerceweb.dto.response.reviewsAndRatings.ReviewsAndRatingsResponseDto;
+import org.example.ecommerceweb.mapper.Mapstruct;
 import org.example.ecommerceweb.repository.ProductRepository;
 import org.example.ecommerceweb.repository.ReviewsRatingsRepository;
 import org.example.ecommerceweb.service.ReviewsRatingsService;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ReviewsRatingsServiceImpl implements ReviewsRatingsService {
     private final ProductRepository productRepository;
     private final ReviewsRatingsRepository reviewsRatingsRepository;
+    private final Mapstruct mapstruct;
 
     @Override
     public ReviewsRatings save(ReviewsRatingsReq req, User user) {
@@ -54,7 +56,12 @@ public class ReviewsRatingsServiceImpl implements ReviewsRatingsService {
     }
 
     @Override
-    public List<ReviewsRatings> findAllByProductId(Long productId) {
-        return reviewsRatingsRepository.findAllByProductId(productId);
+    public ReviewsAndRatingsResponseDto findAllByProductId(Long productId) {
+        List<ReviewsRatings> reviewsRatingsList = reviewsRatingsRepository.findAllByProductId(productId);
+        return ReviewsAndRatingsResponseDto.builder()
+                .reviewsRatingsList(mapstruct.mapToReviewsRatingResponseDtoList(reviewsRatingsList))
+                .averageRating(Math.round(reviewsRatingsList.stream().mapToDouble(ReviewsRatings::getRating).average().orElse(0) * 100.0) / 100.0)
+                .totalReviews(reviewsRatingsList.size())
+                .build();
     }
 }

@@ -3,14 +3,13 @@ package org.example.ecommerceweb.mapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.ecommerceweb.domains.Category;
-import org.example.ecommerceweb.domains.Options;
-import org.example.ecommerceweb.domains.Product;
-import org.example.ecommerceweb.domains.SkuValues;
+import org.example.ecommerceweb.domains.*;
 import org.example.ecommerceweb.dto.response.CategoryResponseDto;
+import org.example.ecommerceweb.dto.response.UserResponseDto;
 import org.example.ecommerceweb.dto.response.product.OptionResponseDto;
 import org.example.ecommerceweb.dto.response.product.ProductResponseDto;
 import org.example.ecommerceweb.dto.response.product.SkuValuesResponseDto;
+import org.example.ecommerceweb.dto.response.reviewsAndRatings.ReviewsRatingResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -47,5 +46,16 @@ public interface Mapstruct {
     @Mapping(target="productId", source="skuValues.key.productId")
     SkuValuesResponseDto maptoSkuValuesResponseDto(SkuValues skuValues);
     List<SkuValuesResponseDto> maptoSkuValuesResponseDtoList(List<SkuValues> skuValues);
+
+
+//     ======================= COVERT OBJECT USER =======================
+     UserResponseDto mapToUserResponseDto(User user);
+    List<UserResponseDto> mapToUserResponseDtoList(List<User> users);
+
+//     ======================= COVERT OBJECT REVIEWSRATINS =======================
+    @Mapping(target = "productId", source = "product.id")
+    @Mapping(target = "user", source = "user")
+     ReviewsRatingResponseDto mapToReviewsRatingResponseDto(ReviewsRatings reviewsRatings);
+    List<ReviewsRatingResponseDto> mapToReviewsRatingResponseDtoList(List<ReviewsRatings> reviewsRatings);
 
 }
