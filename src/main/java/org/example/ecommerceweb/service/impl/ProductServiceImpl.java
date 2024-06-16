@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private final OptionValuesRepository optionValuesRepository;
     private final ProductSkusRepository productSkusRepository;
     private final SkuValuesRepository skuValuesRepository;
+    private final ProductPriceHistoryRepository productPriceHistoryRepository;
 
     @Override
     public void createProduct(CreateProductRequest createProductRequest, MultipartFile[] multipartFiles) throws IOException {
@@ -162,6 +163,13 @@ public class ProductServiceImpl implements ProductService {
             currentVariant.setPrice(variant.getPrice());
 
             ProductSkus savedVariant = productSkusRepository.save(currentVariant);
+
+            ProductPriceHistory productPriceHistory = ProductPriceHistory.builder()
+                    .price(variant.getPrice())
+                    .effectiveDate(LocalDateTime.now())
+                    .productSkus(savedVariant)
+                    .build();
+            productPriceHistoryRepository.save(productPriceHistory);
 //            for (OptionSelectRequestDto option: variant.getOptionSelectRequestDtoList()) {
 //                Options options = optionRepository.findByNameAndProductId(option.getNameOption(),savedProduct.getId());
 //                OptionValues optionValues = optionValuesRepository.findByValueAndOptionId(option.getValueOption(),options.getId());

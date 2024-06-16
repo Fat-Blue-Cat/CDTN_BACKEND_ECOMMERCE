@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +35,8 @@ public class VnPayServiceImpl implements VnPayService {
     @Override
     public String getPaymentUrl(String ipAddress, BigDecimal amount, Long orderId, Long userId) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime createDate = LocalDateTime.now();
+//        LocalDateTime createDate = LocalDateTime.now();
+        LocalDateTime createDate = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         LocalDateTime expireDate = createDate.plusMinutes(5);
 
         String orderInfo = "Pay for order ID: " + orderId;

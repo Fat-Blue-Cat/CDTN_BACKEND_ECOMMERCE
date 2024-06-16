@@ -44,4 +44,8 @@ public class ProductSkus {
     @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();
 
+    @OneToMany(mappedBy = "productSkus")
+    private List<ProductPriceHistory> productPriceHistories;
+
+
 }
