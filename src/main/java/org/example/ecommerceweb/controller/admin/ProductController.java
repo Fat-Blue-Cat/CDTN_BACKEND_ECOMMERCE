@@ -81,7 +81,7 @@ public class ProductController {
 
     @GetMapping("/get-all")
     public ResponseEntity<?> list(@RequestParam(defaultValue = "", required = false) String title,@RequestParam( required = false) String brandName, @RequestParam(defaultValue = "", required = false) String categoryName,@RequestParam(defaultValue = "0", required = false) int minPrice,
-            @RequestParam(defaultValue = "100000", required = false) int maxPrice,@RequestParam(required = false, defaultValue = "price_low") String sort, @RequestParam(defaultValue = "0", required = false) int page, @RequestParam(defaultValue = "5") int size ) {
+            @RequestParam(defaultValue = "100000000", required = false) int maxPrice,@RequestParam(required = false, defaultValue = "price_low") String sort, @RequestParam(defaultValue = "0", required = false) int page, @RequestParam(defaultValue = "5") int size ) {
         try {
             return new ResponseEntity<>(productService.getAllProduct(title,brandName, categoryName,sort,minPrice,maxPrice,page,size ), HttpStatus.OK);
         }catch (Exception e){
