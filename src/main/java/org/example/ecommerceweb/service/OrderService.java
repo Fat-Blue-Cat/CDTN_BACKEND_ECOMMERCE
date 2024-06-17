@@ -3,6 +3,7 @@ package org.example.ecommerceweb.service;
 import org.example.ecommerceweb.domains.Address;
 import org.example.ecommerceweb.domains.Order;
 import org.example.ecommerceweb.domains.User;
+import org.example.ecommerceweb.dto.response.order.OrderResponseDto;
 import org.example.ecommerceweb.exceptions.OrderException;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface OrderService {
 
     public Order findOrderById(Long orderId) throws OrderException;
 
-    public List<Order> usersOrderHistory(Long userId);
+    public List<OrderResponseDto> usersOrderHistory(Long userId,List<String> filter);
 
     public Order placedOrder(Long orderId) throws OrderException;
 

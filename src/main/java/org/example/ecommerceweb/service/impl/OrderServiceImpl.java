@@ -3,7 +3,9 @@ package org.example.ecommerceweb.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.commons.Constant;
 import org.example.ecommerceweb.domains.*;
+import org.example.ecommerceweb.dto.response.order.OrderResponseDto;
 import org.example.ecommerceweb.exceptions.OrderException;
+import org.example.ecommerceweb.mapper.Mapstruct;
 import org.example.ecommerceweb.repository.*;
 import org.example.ecommerceweb.service.CartService;
 import org.example.ecommerceweb.service.OrderService;
@@ -25,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
     private final ProductSkusRepository productSkusRepository;
     private final CouponRepository couponRepository;
+    private final Mapstruct mapstruct;
 
     @Override
     public Order createOrder(User user, Address shippAddress,Long couponId) {
@@ -106,8 +109,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<Order> usersOrderHistory(Long userId) {
-        List<Order> orders = orderRepository.getUserOrders(userId);
+    public List<OrderResponseDto> usersOrderHistory(Long userId,List<String> filter) {
+//        List<Order> orders = orderRepository.getUserOrders(userId);
+        List<OrderResponseDto> orders = mapstruct.mapToOrderResponseDtoList(orderRepository.getUserOrders(userId,filter));
         return orders;
     }
 

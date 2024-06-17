@@ -1,5 +1,6 @@
 package org.example.ecommerceweb.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class ProductPriceHistory {
     private LocalDateTime effectiveDate;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "product_skus_id")
     private ProductSkus productSkus;
 

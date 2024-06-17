@@ -12,4 +12,7 @@ public class VnPayIpnResponseDTO {
 
     @JsonProperty(value = "Message")
     private String message;
+
+    @JsonProperty(value = "OrderId")
+    private Long orderId;
 }

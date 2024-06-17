@@ -89,7 +89,7 @@ public class VnPayServiceImpl implements VnPayService {
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.setPaymentMethod(Constant.PAYMENT_CASH);
         order.setOrderStatus(Constant.ORDER_PLACED);
-        order.setPaymentStatus(Constant.PAYMENT_SUCCESS);
+        order.setPaymentStatus(Constant.PAYMENT_PENDING);
         orderRepository.save(order);
 
         return url;
@@ -227,6 +227,7 @@ public class VnPayServiceImpl implements VnPayService {
         VnPayIpnResponseDTO vnPayIpnResponseDTO = null;
         String txnRef = fields.get("vnp_TxnRef");
         Payment payment = paymentRepository.findById(Long.valueOf(Integer.valueOf(txnRef))).orElse(null);
+        Order order =orderRepository.findById(payment.getOrderId()).orElse(null);
         if (hash.equals(secureHash)) {
 
             if (Objects.nonNull(payment)) {
@@ -238,38 +239,45 @@ public class VnPayServiceImpl implements VnPayService {
                         if (fields.get("vnp_ResponseCode").equals("00")) {
                             System.out.println("SUCCESS");
                             payment.setPaymentStatus(PaymentStatus.SUCCESS);
+                            order.setOrderStatus(Constant.ORDER_PLACED);
+                            order.setPaymentStatus(Constant.PAYMENT_SUCCESS);
+
                         } else {
                             System.out.println("FAILED");
                             payment.setPaymentStatus(PaymentStatus.FAILED);
+                            order.setOrderStatus(Constant.ORDER_PENDING);
+                            order.setPaymentStatus(Constant.PAYMENT_FAILED);
                         }
                         System.out.println("Success");
-                        vnPayIpnResponseDTO = new VnPayIpnResponseDTO("00", "Success");
+                        vnPayIpnResponseDTO = new VnPayIpnResponseDTO("00", "Success",order.getId());
                     } else {
                         System.out.println("Order already confirmed");
                         payment.setPaymentStatus(PaymentStatus.FAILED);
-                        vnPayIpnResponseDTO = new VnPayIpnResponseDTO("02", "Order already confirmed");
+                        vnPayIpnResponseDTO = new VnPayIpnResponseDTO("02", "Order already confirmed",order.getId());
                     }
                 } else {
                     //Số tiền không trùng khớp
                     System.out.println("Invalid amount");
                     payment.setPaymentStatus(PaymentStatus.FAILED);
-                    vnPayIpnResponseDTO = new VnPayIpnResponseDTO("04", "Invalid amount");
+                    order.setPaymentStatus(Constant.PAYMENT_FAILED);
+                    vnPayIpnResponseDTO = new VnPayIpnResponseDTO("04", "Invalid amount",order.getId());
                 }
             } else {
                 //Mã giao dịch không tồn tại
                 System.out.println("Order not found");
                 payment.setPaymentStatus(PaymentStatus.FAILED);
-                vnPayIpnResponseDTO = new VnPayIpnResponseDTO("01", "Order not found");
+                vnPayIpnResponseDTO = new VnPayIpnResponseDTO("01", "Order not found",order.getId());
             }
 
         } else {
             // Sai checksum
             System.out.println("Invalid signature");
             payment.setPaymentStatus(PaymentStatus.FAILED);
-            vnPayIpnResponseDTO = new VnPayIpnResponseDTO("97", "Invalid signature");
+            vnPayIpnResponseDTO = new VnPayIpnResponseDTO("97", "Invalid signature",order.getId());
         }
 
         paymentRepository.save(payment);
+        orderRepository.save(order);
 
 //        if (Objects.nonNull(payment)) {
 //            if (payment.getPaymentStatus().equals(PaymentStatus.SUCCESS)) {

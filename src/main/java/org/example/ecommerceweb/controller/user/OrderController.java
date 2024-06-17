@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/user/orders")
 @RequiredArgsConstructor
@@ -20,12 +25,19 @@ public class OrderController {
     private final AuthService authService;
     private final AddressService addressService;
 
-    @PutMapping("/create/{addressId}")
-    public ResponseEntity<?> createOrder(@RequestHeader(value = "Authorization") String jwt, @PathVariable Long addressId, @RequestParam(required = false) Long couponId) {
+    @PutMapping("/create")
+    public ResponseEntity<?> createOrder(@RequestHeader(value = "Authorization") String jwt, @RequestParam(required = false,defaultValue = "0") Long addressId, @RequestParam(required = false) Long couponId,@RequestBody(required = false) Address newAddress) {
         try{
-            User user = authService.findUserByJwt(jwt);
-            Address address =addressService.getAddress(addressId);
-            return new ResponseEntity<>(orderService.createOrder(user,address,couponId), HttpStatus.OK);
+            if(addressId==0){
+                Address address = addressService.createAddress(newAddress);
+                User user = authService.findUserByJwt(jwt);
+                return new ResponseEntity<>(orderService.createOrder(user,address,couponId), HttpStatus.OK);
+            }else{
+                User user = authService.findUserByJwt(jwt);
+                Address address =addressService.getAddress(addressId);
+                return new ResponseEntity<>(orderService.createOrder(user,address,couponId), HttpStatus.OK);
+            }
+
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -43,10 +55,12 @@ public class OrderController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<?> getOrderHistory(@RequestHeader(value = "Authorization") String jwt) {
+    public ResponseEntity<?> getOrderHistory(@RequestHeader(value = "Authorization") String jwt, @RequestParam(required = false) String[] filter) {
         try{
+
             User user = authService.findUserByJwt(jwt);
-            return new ResponseEntity<>(orderService.usersOrderHistory(user.getId()), HttpStatus.OK);
+            List<String> filterList =(filter != null && filter.length > 0) ? Arrays.asList(filter) : Arrays.asList("DUMMYVALUE");
+            return new ResponseEntity<>(orderService.usersOrderHistory(user.getId(),filterList), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

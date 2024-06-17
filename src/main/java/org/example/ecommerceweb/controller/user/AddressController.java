@@ -20,7 +20,7 @@ public class AddressController {
         try {
             address.setUser(authService.findUserByJwt(jwt));
             addressService.createAddress(address);
-            return ResponseEntity.ok("Address created successfully!");
+            return ResponseEntity.ok(addressService.createAddress(address));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

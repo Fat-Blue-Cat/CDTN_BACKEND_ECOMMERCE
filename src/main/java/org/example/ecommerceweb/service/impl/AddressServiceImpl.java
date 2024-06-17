@@ -20,8 +20,8 @@ public class AddressServiceImpl implements AddressService {
 
 
     @Override
-    public void createAddress(Address address) {
-        addressRepository.save(address);
+    public Address createAddress(Address address) {
+        return addressRepository.save(address);
     }
 
     @Override

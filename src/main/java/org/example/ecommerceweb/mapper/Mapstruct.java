@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerceweb.domains.*;
 import org.example.ecommerceweb.dto.response.CategoryResponseDto;
 import org.example.ecommerceweb.dto.response.UserResponseDto;
+import org.example.ecommerceweb.dto.response.order.OrderItemResponseDto;
+import org.example.ecommerceweb.dto.response.order.OrderResponseDto;
 import org.example.ecommerceweb.dto.response.product.OptionResponseDto;
 import org.example.ecommerceweb.dto.response.product.ProductResponseDto;
 import org.example.ecommerceweb.dto.response.product.SkuValuesResponseDto;
@@ -57,5 +59,15 @@ public interface Mapstruct {
     @Mapping(target = "user", source = "user")
      ReviewsRatingResponseDto mapToReviewsRatingResponseDto(ReviewsRatings reviewsRatings);
     List<ReviewsRatingResponseDto> mapToReviewsRatingResponseDtoList(List<ReviewsRatings> reviewsRatings);
+
+//     ======================= COVERT OBJECT ORDERITEM =======================
+    @Mapping(target = "productId", source = "orderItem.productSkus.product.id")
+    @Mapping(target = "images", source = "orderItem.productSkus.product.images")
+     OrderItemResponseDto mapToOrderItemResponseDto(OrderItem orderItem);
+    List<OrderItemResponseDto> mapToOrderItemResponseDtoList(List<OrderItem> orderItems);
+//     ======================= COVERT OBJECT Order =======================
+    OrderResponseDto mapToOrderResponseDto(Order order);
+    List<OrderResponseDto> mapToOrderResponseDtoList(List<Order> orders);
+
 
 }
