@@ -57,6 +57,17 @@ public class AuthController {
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfileHandler(
+            @RequestHeader(value="Authorization") String jwt,@RequestBody User user){
+        try {
+            User currentUser = authService.findUserByJwt(jwt);
+            return new ResponseEntity<>(authService.updateProfile(currentUser,user),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email){
         try {

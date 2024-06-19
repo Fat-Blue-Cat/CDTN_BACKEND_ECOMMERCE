@@ -19,6 +19,16 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createAccount(@RequestParam String userName) {
+        try {
+
+            return ResponseEntity.ok(accountService.createAccount(userName));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("/update")
     public ResponseEntity<?> updateRoleforUser(@RequestParam Long userId, @RequestParam Long roleId) {
         try {
@@ -28,4 +38,6 @@ public class AccountController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }

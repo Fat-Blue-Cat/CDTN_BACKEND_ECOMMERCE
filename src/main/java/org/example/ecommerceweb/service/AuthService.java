@@ -19,6 +19,8 @@ public interface AuthService {
     User loginReturnUser(LoginReqDto loginDto);
     User SignupReturnUser(SignupReqDto signupReqDto);
 
+    User updateProfile(User currentUser,User user);
+
     User findUserByJwt(String jwt);
 
     String forgotPassword(String email);

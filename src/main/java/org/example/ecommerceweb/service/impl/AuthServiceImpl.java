@@ -186,6 +186,14 @@ public class AuthServiceImpl implements AuthService {
         return savedUSer;
     }
 
+    @Override
+    public User updateProfile(User currentUser, User user) {
+        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        return userRepository.save(currentUser);
+    }
+
     private Authentication authenticate(String username, String password) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
