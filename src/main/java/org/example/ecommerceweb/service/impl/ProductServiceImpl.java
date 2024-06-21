@@ -6,6 +6,7 @@ import org.example.ecommerceweb.domains.*;
 import org.example.ecommerceweb.domains.keys.KeySkuValues;
 import org.example.ecommerceweb.dto.req.product.*;
 import org.example.ecommerceweb.dto.response.product.ProductResponseDto;
+import org.example.ecommerceweb.dto.response.projection.IAverageRating;
 import org.example.ecommerceweb.exceptions.ProductException;
 import org.example.ecommerceweb.mapper.Mapstruct;
 import org.example.ecommerceweb.mapper.MapstructImpl;
@@ -40,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductSkusRepository productSkusRepository;
     private final SkuValuesRepository skuValuesRepository;
     private final ProductPriceHistoryRepository productPriceHistoryRepository;
+    private final ReviewsRatingsRepository reviewsRatingsRepository;
 
     @Override
     public void createProduct(CreateProductRequest createProductRequest, MultipartFile[] multipartFiles) throws IOException {
@@ -257,9 +259,14 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductResponseDto> getAllProduct(String title, String brandName, String categoryName, String sort, int minPrice, int maxPrice, int page, int size) {
 //        return  null;
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-//        List<Product> products = productRepository.findAll();
-//        return  productRepository.findAll(pageable).map(mapstructImpl::mapToProductResponseDto);
-        return productRepository.getAllProductByFilter(title, brandName, categoryName, sort, minPrice, maxPrice, pageable).map(mapstructImpl::mapToProductResponseDto);
+        List<IAverageRating> IAverageRatingList = reviewsRatingsRepository.getAllAverageRatingProduct();
+        Page<Product> products = productRepository.getAllProductByFilter(title, brandName, categoryName, sort, minPrice, maxPrice, pageable);
+        return products.map(product -> {
+            ProductResponseDto productResponseDto = mapstruct.mapToProductResponseDto(product);
+            Optional<IAverageRating> averageRating = IAverageRatingList.stream().filter(average -> average.getProductId() == product.getId()).findFirst();
+            averageRating.ifPresent(iAverageRating -> productResponseDto.setTotalRating(iAverageRating.getAverageRating()));
+            return productResponseDto;
+        });
     }
 
     @Override

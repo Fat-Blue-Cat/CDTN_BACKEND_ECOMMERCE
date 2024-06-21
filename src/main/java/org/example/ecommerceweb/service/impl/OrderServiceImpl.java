@@ -3,6 +3,7 @@ package org.example.ecommerceweb.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.commons.Constant;
 import org.example.ecommerceweb.domains.*;
+import org.example.ecommerceweb.dto.response.order.OrderItemResponseDto;
 import org.example.ecommerceweb.dto.response.order.OrderResponseDto;
 import org.example.ecommerceweb.exceptions.OrderException;
 import org.example.ecommerceweb.mapper.Mapstruct;
@@ -99,10 +100,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findOrderById(Long orderId) throws OrderException {
+    public Object findOrderById(Long orderId) throws OrderException {
         Optional<Order> opt= orderRepository.findById(orderId);
         if(opt.isPresent()){
-            return opt.get();
+            return mapstruct.mapToOrderResponseDto(opt.get());
         }
         throw new OrderException("order not exist with id " + orderId);
     }
@@ -130,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order confirmedOrder(Long orderId) throws OrderException {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
         order.setOrderStatus(Constant.ORDER_CONFIRMED);
 
         return orderRepository.save(order);
@@ -138,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order shippedOrder(Long orderId) throws OrderException {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
         order.setOrderStatus(Constant.ORDER_SHIPPED);
 
         return orderRepository.save(order);
@@ -146,7 +147,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order deliveredOrder(Long orderId) throws OrderException {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
+
         order.setOrderStatus(Constant.ORDER_DELIVERED);
 
         return orderRepository.save(order);
@@ -154,7 +156,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order canceledOrder(Long orderId) throws OrderException {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
+
         if(!order.getOrderStatus().equals(Constant.ORDER_CONFIRMED) && !order.getOrderStatus().equals(Constant.ORDER_PENDING)){
             throw new OrderException("Order can't cancel, it's already confirmed");
         }
@@ -179,7 +182,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long orderId) throws OrderException {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
+
         orderRepository.delete(order);
 
     }

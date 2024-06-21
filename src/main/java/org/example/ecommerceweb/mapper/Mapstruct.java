@@ -63,6 +63,7 @@ public interface Mapstruct {
 //     ======================= COVERT OBJECT ORDERITEM =======================
     @Mapping(target = "productId", source = "orderItem.productSkus.product.id")
     @Mapping(target = "images", source = "orderItem.productSkus.product.images")
+    @Mapping(target = "title", source = "orderItem.productSkus.product.title")
      OrderItemResponseDto mapToOrderItemResponseDto(OrderItem orderItem);
     List<OrderItemResponseDto> mapToOrderItemResponseDtoList(List<OrderItem> orderItems);
 //     ======================= COVERT OBJECT Order =======================

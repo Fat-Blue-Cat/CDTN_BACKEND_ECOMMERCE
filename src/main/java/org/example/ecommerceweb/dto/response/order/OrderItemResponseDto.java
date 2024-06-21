@@ -20,6 +20,7 @@ public class OrderItemResponseDto {
     private Integer discount;
     private Double discountedPrice;
     private Long productId;
+    private String title;
     private List<Image> images;
     private ProductSkus productSkus;
 }

@@ -30,11 +30,13 @@ app:
   app-jwt-renewal-milliseconds: '604800000' # 7 days
   authorizedRedirectUris:
     - http://localhost:3000/oauth2/redirect
+    - https://graduation-thesis-frosty-morning-5421.fly.dev/oauth2/redirect
   tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
   tokenExpirationMsec: 864000000
 
 #CONFIGURATION REDIRECT FOR URL:
-url_FrontEnd: http://localhost:3000
+#url_FrontEnd: http://localhost:3000
+url_FrontEnd: https://graduation-thesis-frosty-morning-5421.fly.dev
 
 # COINFIGURATION FOR VNPAY
 vnpay:
@@ -42,8 +44,10 @@ vnpay:
   vnp_HashSecret: OPE3L9X5076QJFE0GD8QUAODER4TXH0O
   vnp_Url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 #  vnp_ReturnUrl: http://localhost:8080/api/v1/vnpay/return
-  vnp_ReturnUrl: http://localhost:8080/vnpay/payment/url/ipn
-#  vnp_ReturnUrl: http://localhost:8080/vpn/infor/return
+#  vnp_ReturnUrl: http://localhost:8080/vnpay/payment/url/ipn
+  vnp_ReturnUrl: https://cdtn-backend-ecommerce.fly.dev/vnpay/payment/url/ipn
+
+  #  vnp_ReturnUrl: http://localhost:8080/vpn/infor/return
 
 #  vnp_apiUrl: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
   vnp_Version: 2.1.0

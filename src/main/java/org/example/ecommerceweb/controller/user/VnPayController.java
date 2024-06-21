@@ -40,7 +40,7 @@ public class VnPayController {
         VnPayIpnResponseDTO response = vnPayService.handleIpn(params);
 
         String status = response.getRspCode().equals("00") ? "success" : "failure";
-        String redirectUrl = urlFrontEnd+ "/userAddress/"+response.getOrderId()+"?status=" + status + "&message=" + response.getMessage();
+        String redirectUrl = urlFrontEnd+ "/orderhistory/"+response.getOrderId()+"?status=" + status + "&message=" + response.getMessage();
 
         return new RedirectView(redirectUrl);
     }

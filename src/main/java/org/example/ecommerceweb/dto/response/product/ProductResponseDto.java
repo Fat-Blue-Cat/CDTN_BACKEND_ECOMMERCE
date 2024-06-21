@@ -40,6 +40,8 @@ public class ProductResponseDto {
 //    private Set<ProductSkus> productSkus = new HashSet<>();
     private List<ProductSkuResponseDto> productSkus;
 
+    private Double totalRating;
+
 
 //    private List<ProductVariationsResponseDto> productVariationsResponseDtoList;
 }
