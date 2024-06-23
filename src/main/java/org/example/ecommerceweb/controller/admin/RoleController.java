@@ -24,20 +24,25 @@ public class RoleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addRole(@RequestParam String roleName) {
+    public ResponseEntity<?> addRole(@RequestParam String roleName,@RequestParam(required = false) List<Long> permissionIdList) {
         try {
-            roleService.addRole(roleName);
-            return ResponseEntity.ok("Role added successfully!");
+            if(permissionIdList != null && permissionIdList.isEmpty()){
+                permissionIdList = null;
+            }
+            return ResponseEntity.ok(roleService.addRole(roleName, permissionIdList));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateRole(@RequestParam Long roleId, @RequestParam String roleName) {
+    public ResponseEntity<?> updateRole(@RequestParam Long roleId, @RequestParam String roleName,@RequestParam(required = false) List<Long> permissionIdList) {
         try {
-            roleService.updateRole(roleId, roleName);
-            return ResponseEntity.ok("Role updated successfully!");
+            if(permissionIdList != null && permissionIdList.isEmpty()){
+                permissionIdList = null;
+            }
+
+            return ResponseEntity.ok( roleService.updateRole(roleId, roleName, permissionIdList));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

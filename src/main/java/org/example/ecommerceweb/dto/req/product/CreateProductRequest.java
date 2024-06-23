@@ -14,7 +14,7 @@ import java.util.List;
 public class CreateProductRequest {
     private String title;
     private String description;
-    private int discountPercent;
+    private int discountPercent = 0;
     private Long brandId;
     private Long categoryId;
     private int totalQuantity;

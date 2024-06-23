@@ -1,6 +1,7 @@
 package org.example.ecommerceweb.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.domains.*;
 import org.example.ecommerceweb.domains.keys.KeySkuValues;
@@ -44,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewsRatingsRepository reviewsRatingsRepository;
 
     @Override
+    @Transactional
     public void createProduct(CreateProductRequest createProductRequest, MultipartFile[] multipartFiles) throws IOException {
         Set<OptionRequestDto> optionRequestDto = mapstruct.stringToSet(createProductRequest.getOptionRequestDtoList(), OptionRequestDto.class);
         Set<VariantsRequestDto> variantsRequestDto = mapstruct.stringToSet(createProductRequest.getVariantsRequestDtoList(), VariantsRequestDto.class);
@@ -117,6 +119,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    @Transactional
     @Override
     public void updateProduct(CreateProductRequest createProductRequest, Long id, MultipartFile[] multipartFiles, Long[] imageIdDelete) throws IOException {
         Product product = productRepository.findById(id)
@@ -212,6 +215,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+    @Transactional
     @Override
     public void deleteProduct(Long id) throws IOException {
         List<Image> images = imageRepository.findAllByProductsId(id);

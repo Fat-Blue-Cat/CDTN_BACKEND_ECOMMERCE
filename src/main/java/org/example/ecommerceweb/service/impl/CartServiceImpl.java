@@ -12,6 +12,11 @@ import org.example.ecommerceweb.service.CartService;
 //import org.example.ecommerceweb.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -75,9 +80,15 @@ public class CartServiceImpl implements CartService {
         cart.setTotalDiscountedPrice(totalDiscountedPrice);
         cart.setTotalItem(totalItem);
         cart.setTotalPrice(totalPrice);
+
+        Set<CartItem> sortedCartItems = cart.getCartItems().stream()
+                .sorted(Comparator.comparing(CartItem::getId))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+
 //        cart.setTotalDiscount(totalPrice-totalDiscountedPrice);
         cartRepository.save(cart);
-
+        cart.setCartItems(sortedCartItems);
         return cart;
     }
 

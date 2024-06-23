@@ -26,20 +26,20 @@ public class Permission {
     @Column(name = "permission_name")
     private String permissionName;
 
-    @Column(name = "alternative_name")
-    private String alternativeName;
-
-    @Column(name = "create_permission")
-    private Boolean createPermission;
-
-    @Column(name = "read_permission")
-    private Boolean readPermission;
-
-    @Column(name = "update_permission")
-    private Boolean updatePermission;
-
-    @Column(name = "delete_permission")
-    private Boolean deletePermission;
+//    @Column(name = "alternative_name")
+//    private String alternativeName;
+//
+//    @Column(name = "create_permission")
+//    private Boolean createPermission;
+//
+//    @Column(name = "read_permission")
+//    private Boolean readPermission;
+//
+//    @Column(name = "update_permission")
+//    private Boolean updatePermission;
+//
+//    @Column(name = "delete_permission")
+//    private Boolean deletePermission;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)

@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final Mapstruct mapstruct;
 
     @Override
-    public void createCategory(MultipartFile multipartFile, String name) throws IOException {
+    public Category createCategory(MultipartFile multipartFile, String name) throws IOException {
         BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
         if (bi == null) {
             throw new IOException("Image non valide!");
@@ -45,13 +45,13 @@ public class CategoryServiceImpl implements CategoryService {
         imageService.save(image);
 
         Category category = Category.builder().name(name).image(image).build();
-        categoryRepository.save(category);
+        return categoryRepository.save(category);
 
 
     }
 
     @Override
-    public void updateCategory(Long id, MultipartFile multipartFile, String name) {
+    public Category updateCategory(Long id, MultipartFile multipartFile, String name) {
         Category category = categoryRepository.findById(id).get();
         Optional<Image> imageOptional = imageService.getOne(category.getImage().getId());
         if (imageOptional.isEmpty()) {
@@ -72,11 +72,11 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new RuntimeException("Failed to update image in Cloudinary", e);
             }
             category.setName(name);
-            categoryRepository.save(category);
+            return categoryRepository.save(category);
         }else{
             category.setName(name);
             category.setImage(image);
-            categoryRepository.save(category);
+            return categoryRepository.save(category);
         }
 
 

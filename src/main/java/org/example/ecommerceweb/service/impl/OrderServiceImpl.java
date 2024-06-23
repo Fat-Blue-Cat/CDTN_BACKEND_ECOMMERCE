@@ -158,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
     public Order canceledOrder(Long orderId) throws OrderException {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
 
-        if(!order.getOrderStatus().equals(Constant.ORDER_CONFIRMED) && !order.getOrderStatus().equals(Constant.ORDER_PENDING)){
+        if(!order.getOrderStatus().equals(Constant.ORDER_CONFIRMED) && !order.getOrderStatus().equals(Constant.ORDER_PENDING) && !order.getOrderStatus().equals(Constant.ORDER_PLACED)){
             throw new OrderException("Order can't cancel, it's already confirmed");
         }
         for (OrderItem item: order.getOrderItems()){

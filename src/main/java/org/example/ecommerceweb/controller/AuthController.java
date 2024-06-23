@@ -3,6 +3,7 @@ package org.example.ecommerceweb.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.JwtAuthDto;
+import org.example.ecommerceweb.dto.req.ChangePasswordRequestDto;
 import org.example.ecommerceweb.dto.req.LoginReqDto;
 import org.example.ecommerceweb.dto.req.SignupReqDto;
 import org.example.ecommerceweb.service.AuthService;
@@ -59,10 +60,10 @@ public class AuthController {
 
     @PutMapping("/update-profile")
     public ResponseEntity<?> updateProfileHandler(
-            @RequestHeader(value="Authorization") String jwt,@RequestBody User user){
+            @RequestHeader(value="Authorization") String jwt, @RequestBody ChangePasswordRequestDto changePasswordRequestDto){
         try {
             User currentUser = authService.findUserByJwt(jwt);
-            return new ResponseEntity<>(authService.updateProfile(currentUser,user),HttpStatus.OK);
+            return new ResponseEntity<>(authService.updateProfile(currentUser,changePasswordRequestDto),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

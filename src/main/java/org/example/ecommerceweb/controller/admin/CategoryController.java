@@ -42,23 +42,23 @@ public class CategoryController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam(required = false) MultipartFile multipartFile, @RequestParam String name) throws IOException {
+    public ResponseEntity<?> upload(@RequestParam(required = false) MultipartFile multipartFile, @RequestParam String name) throws IOException {
         try{
-            categoryService.createCategory(multipartFile,name);
-            return new ResponseEntity<>("Add category success! ", HttpStatus.OK);
+
+            return new ResponseEntity<>( categoryService.createCategory(multipartFile,name), HttpStatus.OK);
         }catch (IOException e) {
             return new ResponseEntity<>("Failed to upload image", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@RequestParam(required = false,defaultValue = "null") MultipartFile multipartFile, @RequestParam String name, @PathVariable("id") Long id){
+    public ResponseEntity<?> update(@RequestParam(required = false,defaultValue = "null") MultipartFile multipartFile, @RequestParam String name, @PathVariable("id") Long id){
         if (multipartFile == null || multipartFile.isEmpty()) {
             multipartFile = null; // or handle it in a way that suits your needs
         }
         try {
-            categoryService.updateCategory(id,multipartFile, name);
-            return new ResponseEntity<>("Update category success! ", HttpStatus.OK);
+
+            return new ResponseEntity<>(categoryService.updateCategory(id,multipartFile, name), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Failed to update category", HttpStatus.INTERNAL_SERVER_ERROR);
         }

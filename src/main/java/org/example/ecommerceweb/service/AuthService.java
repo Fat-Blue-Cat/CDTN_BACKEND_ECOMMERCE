@@ -4,6 +4,7 @@ package org.example.ecommerceweb.service;
 
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.JwtAuthDto;
+import org.example.ecommerceweb.dto.req.ChangePasswordRequestDto;
 import org.example.ecommerceweb.dto.req.LoginReqDto;
 import org.example.ecommerceweb.dto.req.SignupReqDto;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -19,7 +20,7 @@ public interface AuthService {
     User loginReturnUser(LoginReqDto loginDto);
     User SignupReturnUser(SignupReqDto signupReqDto);
 
-    User updateProfile(User currentUser,User user);
+    User updateProfile(User currentUser, ChangePasswordRequestDto changePasswordRequestDto);
 
     User findUserByJwt(String jwt);
 

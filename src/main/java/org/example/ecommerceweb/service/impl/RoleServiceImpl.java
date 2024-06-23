@@ -10,6 +10,7 @@ import org.example.ecommerceweb.repository.PermissionRepository;
 import org.example.ecommerceweb.repository.RoleRepository;
 import org.example.ecommerceweb.service.RoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,17 +30,39 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
+    @Transactional
     @Override
-    public void addRole(String roleName) {
-        Role role = Role.builder().roleName(roleName).build();
-        roleRepository.save(role);
+    public Role addRole(String roleName, List<Long> permissionIdList) {
+        Role role =  new Role();
+        if(permissionIdList == null){
+            role.setPermissions(new HashSet<>());
+        }
+        else{
+            role.setPermissions(new HashSet<>(permissionRepository.findAllById(permissionIdList)));
+        }
+        role.setRoleName(roleName);
+        return roleRepository.save(role);
     }
 
     @Override
-    public void updateRole(Long roleId, String roleName) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role not found"));
+    public Role updateRole(Long roleId, String roleName, List<Long> permissionIdList) {
+        Role role =  roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role not found"));
+        if(role.getRoleName().equals(Constant.ROLE_ADMIN)){
+            throw new RuntimeException("Admin role can not be changed");
+        }
+        if(role.getRoleName().equals(Constant.ROLE_USER)){
+            throw new RuntimeException("User role can not be changed");
+        }
+
+
+        if(permissionIdList == null){
+            role.setPermissions(new HashSet<>());
+        }
+        else{
+            role.setPermissions(new HashSet<>(permissionRepository.findAllById(permissionIdList)));
+        }
         role.setRoleName(roleName);
-        roleRepository.save(role);
+        return roleRepository.save(role);
     }
 
     @Override

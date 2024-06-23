@@ -40,24 +40,15 @@ public class PermissionServiceImpl implements PermissionService {
         }
         if(permissionRepository.findAll().isEmpty()){
             List<Permission> permissions = List.of(
-                    Permission.builder().permissionName(Constant.PERMISSION_ADMIN).alternativeName(Constant.PERMISSION_ADMIN)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_USER).alternativeName(Constant.PERMISSION_MANAGER_USER)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_ROLE).alternativeName(Constant.PERMISSION_MANAGER_ROLE)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_CATEGORY).alternativeName(Constant.PERMISSION_MANAGER_CATEGORY)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_PRODUCT).alternativeName(Constant.PERMISSION_MANAGER_PRODUCT)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_ORDER).alternativeName(Constant.PERMISSION_MANAGER_ORDER)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_COUPON).alternativeName(Constant.PERMISSION_MANAGER_COUPON)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_BRAND).permissionName(Constant.PERMISSION_MANAGER_BRAND)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build(),
-                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_REVENUE).alternativeName(Constant.PERMISSION_MANAGER_REVENUE)
-                            .createPermission(true).readPermission(true).updatePermission(true).deletePermission(true).build()
+                    Permission.builder().permissionName(Constant.PERMISSION_ADMIN).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_USER).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_ROLE).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_CATEGORY).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_PRODUCT).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_ORDER).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_COUPON).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_BRAND).build(),
+                    Permission.builder().permissionName(Constant.PERMISSION_MANAGER_REVENUE).build()
 
             );
             permissionRepository.saveAll(permissions);
@@ -86,43 +77,43 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
 
-    @Override
-    public void addPermission(Permission permission) {
-
-        permissionRepository.save(permission);
-    }
-
-    @Transactional
-    @Override
-    public void deletePermission(Long permissionId) {
-        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found"));
-        if(permission.getPermissionName().equals(Constant.PERMISSION_ADMIN) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_USER) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_ROLE)
-        || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_CATEGORY) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_PRODUCT) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_ORDER)
-        || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_COUPON) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_BRAND) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_REVENUE)
-        ){
-            throw new RuntimeException("Permission can not be deleted");
-        }
-        for (Role role : permission.getRoles()) {
-            role.getPermissions().remove(permission);
-            roleRepository.save(role);
-        }
-
-        permissionRepository.deleteById(permissionId);
-    }
-
-    @Transactional
-    @Override
-    public void updatePermission(Long permissionId, Permission permission){
-        Permission permissionCurrent = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found"));
-        permissionCurrent.setPermissionName(permission.getPermissionName());
-        permissionCurrent.setAlternativeName(permission.getAlternativeName());
-        permissionCurrent.setCreatePermission(permission.getCreatePermission());
-        permissionCurrent.setReadPermission(permission.getReadPermission());
-        permissionCurrent.setUpdatePermission(permission.getUpdatePermission());
-        permissionCurrent.setDeletePermission(permission.getDeletePermission());
-        permissionRepository.save(permissionCurrent);
-
-    }
+//    @Override
+//    public void addPermission(Permission permission) {
+//
+//        permissionRepository.save(permission);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public void deletePermission(Long permissionId) {
+//        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found"));
+//        if(permission.getPermissionName().equals(Constant.PERMISSION_ADMIN) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_USER) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_ROLE)
+//        || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_CATEGORY) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_PRODUCT) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_ORDER)
+//        || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_COUPON) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_BRAND) || permission.getPermissionName().equals(Constant.PERMISSION_MANAGER_REVENUE)
+//        ){
+//            throw new RuntimeException("Permission can not be deleted");
+//        }
+//        for (Role role : permission.getRoles()) {
+//            role.getPermissions().remove(permission);
+//            roleRepository.save(role);
+//        }
+//
+//        permissionRepository.deleteById(permissionId);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public void updatePermission(Long permissionId, Permission permission){
+//        Permission permissionCurrent = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found"));
+//        permissionCurrent.setPermissionName(permission.getPermissionName());
+//        permissionCurrent.setAlternativeName(permission.getAlternativeName());
+//        permissionCurrent.setCreatePermission(permission.getCreatePermission());
+//        permissionCurrent.setReadPermission(permission.getReadPermission());
+//        permissionCurrent.setUpdatePermission(permission.getUpdatePermission());
+//        permissionCurrent.setDeletePermission(permission.getDeletePermission());
+//        permissionRepository.save(permissionCurrent);
+//
+//    }
 
 
 

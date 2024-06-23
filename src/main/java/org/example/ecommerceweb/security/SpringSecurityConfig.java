@@ -67,7 +67,7 @@ public class SpringSecurityConfig {
                     authorize.requestMatchers("/api/user/**").authenticated();
                     authorize.requestMatchers("/api/admin/**").authenticated();
                     authorize.requestMatchers("/admin/role/**").authenticated();
-
+                    authorize.requestMatchers("/admin/permission/**").authenticated();
                     authorize.anyRequest().permitAll();
                 })
 //                .oauth2Login(Customizer.withDefaults());

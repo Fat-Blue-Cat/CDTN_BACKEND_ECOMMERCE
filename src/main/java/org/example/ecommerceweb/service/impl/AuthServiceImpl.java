@@ -3,9 +3,11 @@ package org.example.ecommerceweb.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.commons.Constant;
+import org.example.ecommerceweb.commons.ExceptionValue;
 import org.example.ecommerceweb.domains.Role;
 import org.example.ecommerceweb.domains.User;
 import org.example.ecommerceweb.dto.JwtAuthDto;
+import org.example.ecommerceweb.dto.req.ChangePasswordRequestDto;
 import org.example.ecommerceweb.dto.req.LoginReqDto;
 import org.example.ecommerceweb.dto.req.SignupReqDto;
 import org.example.ecommerceweb.repository.CartRepository;
@@ -30,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
+
 
 @RequiredArgsConstructor
 @Service
@@ -187,10 +190,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User updateProfile(User currentUser, User user) {
-        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        currentUser.setFirstName(user.getFirstName());
-        currentUser.setLastName(user.getLastName());
+    public User updateProfile(User currentUser, ChangePasswordRequestDto changePasswordRequestDto) {
+
+        if(!passwordEncoder.matches(changePasswordRequestDto.getOldPassword(),currentUser.getPassword())){
+            throw new BadCredentialsException(ExceptionValue.PASSWORD_INCORRECT);
+        }
+        currentUser.setPassword(passwordEncoder.encode(changePasswordRequestDto.getConfirmPassword()));
+
         return userRepository.save(currentUser);
     }
 
