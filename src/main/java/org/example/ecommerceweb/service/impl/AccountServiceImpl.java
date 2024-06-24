@@ -1,5 +1,6 @@
 package org.example.ecommerceweb.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.domains.Role;
 import org.example.ecommerceweb.domains.User;
@@ -25,6 +26,7 @@ public class AccountServiceImpl implements AccountService {
         return userRepository.findAll(Sort.by("id"));
     }
 
+    @Transactional
     @Override
     public void updateAccount(Long accountId, Long roleId) {
         User user = userRepository.findById(accountId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -33,9 +35,18 @@ public class AccountServiceImpl implements AccountService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public User createAccount(String userName) {
         User user = User.builder().userName(userName).password(passwordEncoder.encode("12345678")).createdAt(new Date()).build();
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public User changeStatusAccount(Long accountId) {
+        User user = userRepository.findById(accountId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setIsActivated(!user.getIsActivated());
         return userRepository.save(user);
     }
 }

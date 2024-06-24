@@ -9,4 +9,5 @@ public interface AccountService {
     List<User> getAllAccounts();
     void updateAccount(Long accountId, Long roleId);
     User createAccount(String userName);
+    User changeStatusAccount(Long accountId);
 }

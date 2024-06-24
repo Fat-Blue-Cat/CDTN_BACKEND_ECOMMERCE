@@ -1,6 +1,7 @@
 package org.example.ecommerceweb.service.impl;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceweb.commons.Constant;
 import org.example.ecommerceweb.commons.ExceptionValue;
@@ -59,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         return jwtAuthDto;
     }
 
+    @Transactional
     @Override
     public JwtAuthDto signUp(SignupReqDto signupReqDto) throws Exception {
         boolean isExistMail = userRepository.existsByEmailAddress(signupReqDto.getEmail());
@@ -73,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(signupReqDto.getFirstName())
                 .lastName(signupReqDto.getLastName())
                 .password(passwordEncoder.encode(signupReqDto.getPassword()))
+                .isActivated(true)
                 .role(role)
                 .createdAt(new Date())
                 .build();
@@ -155,7 +158,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User loginReturnUser(LoginReqDto loginDto) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginDto.getUsernameOrEmail());
-
         if(userDetails == null){
 
             throw new BadCredentialsException("Invalid Username");
@@ -189,6 +191,7 @@ public class AuthServiceImpl implements AuthService {
         return savedUSer;
     }
 
+    @Transactional
     @Override
     public User updateProfile(User currentUser, ChangePasswordRequestDto changePasswordRequestDto) {
 
@@ -224,6 +227,7 @@ public class AuthServiceImpl implements AuthService {
         return user.get();
     }
 
+    @Transactional
     @Override
     public String forgotPassword(String email) {
         Optional<User> user = userRepository.findByUserNameOrEmailAddress(email,email);

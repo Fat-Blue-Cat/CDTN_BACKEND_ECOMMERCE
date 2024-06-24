@@ -82,6 +82,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setUserName(oAuth2UserInfo.getName());
         user.setEmailAddress(oAuth2UserInfo.getEmail());
         user.setProvider(AuthProvider.google);
+        user.setIsActivated(true);
         User userSaved = userRepository.save(user);
         Cart cart = new Cart();
         cart.setUser(userSaved);

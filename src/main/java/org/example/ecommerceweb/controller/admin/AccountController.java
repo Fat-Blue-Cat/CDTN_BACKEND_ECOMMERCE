@@ -39,5 +39,15 @@ public class AccountController {
         }
     }
 
+    @PutMapping("/change-status")
+    public ResponseEntity<?> changeStatusAccount(@RequestParam Long userId) {
+        try {
+
+            return ResponseEntity.ok(accountService.changeStatusAccount(userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }

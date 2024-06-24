@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.example.ecommerceweb.commons.ExceptionValue.USER_NOT_ACTIVE;
+
 @Service
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,7 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not exists by Username or Email")));
         Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_USER"));
 //        Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority(user.get().getRoleName()));
-//
+
+        if (!user.get().getIsActivated()){
+            throw new UsernameNotFoundException(USER_NOT_ACTIVE);
+        }
+
         if (user.get().getProviderId() != null) {
             return new org.springframework.security.core.userdetails.User(
                     usernameOrEmail,
