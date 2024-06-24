@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerceweb.domains.*;
 import org.example.ecommerceweb.dto.response.CategoryResponseDto;
 import org.example.ecommerceweb.dto.response.UserResponseDto;
+import org.example.ecommerceweb.dto.response.analytic.ProductResAnalyticDto;
 import org.example.ecommerceweb.dto.response.order.OrderItemResponseDto;
 import org.example.ecommerceweb.dto.response.order.OrderResponseDto;
 import org.example.ecommerceweb.dto.response.product.OptionResponseDto;
@@ -69,6 +70,11 @@ public interface Mapstruct {
 //     ======================= COVERT OBJECT Order =======================
     OrderResponseDto mapToOrderResponseDto(Order order);
     List<OrderResponseDto> mapToOrderResponseDtoList(List<Order> orders);
+
+//     ======================= COVERT OBJECT Order =======================
+    ProductResAnalyticDto mapToProductResAnalyticDto(Product product);
+    List<ProductResAnalyticDto> mapToProductResAnalyticDtoList(List<Product> products);
+
 
 
 }
