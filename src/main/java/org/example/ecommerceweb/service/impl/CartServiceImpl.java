@@ -81,14 +81,14 @@ public class CartServiceImpl implements CartService {
         cart.setTotalItem(totalItem);
         cart.setTotalPrice(totalPrice);
 
-        Set<CartItem> sortedCartItems = cart.getCartItems().stream()
-                .sorted(Comparator.comparing(CartItem::getId))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+//        Set<CartItem> sortedCartItems = cart.getCartItems().stream()
+//                .sorted(Comparator.comparing(CartItem::getId))
+//                .collect(Collectors.toCollection(LinkedHashSet::new));
 
 
 //        cart.setTotalDiscount(totalPrice-totalDiscountedPrice);
         cartRepository.save(cart);
-        cart.setCartItems(sortedCartItems);
+//        cart.setCartItems(sortedCartItems);
         return cart;
     }
 
