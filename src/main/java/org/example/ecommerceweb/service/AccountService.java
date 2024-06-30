@@ -10,4 +10,7 @@ public interface AccountService {
     void updateAccount(Long accountId, Long roleId);
     User createAccount(String userName);
     User changeStatusAccount(Long accountId);
+    String resetPassword(Long accountId);
+    void deleteAccount(Long accountId);
+
 }

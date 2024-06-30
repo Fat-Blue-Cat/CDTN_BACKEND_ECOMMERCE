@@ -3,9 +3,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ep-shrill-truth-a1tzyu0n.ap-southeast-1.aws.neon.tech/ecommerce010702?sslmode=require
-    username: cosmeticweb0702_owner
-    password: weUa5Ep1hVzc
+    url: jdbc:postgresql://ep-falling-sun-a1d9wda6.ap-southeast-1.aws.neon.tech/ecommerce010702?sslmode=require
+    username: ecommerce010702_owner
+    password: mtHkzhY9A3PQ
   jpa:
     hibernate:
       ddl-auto: update

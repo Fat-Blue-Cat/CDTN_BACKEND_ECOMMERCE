@@ -9,4 +9,6 @@ public interface SkuValuesRepository extends JpaRepository<SkuValues, Long> {
     List<SkuValues> findAllByKey_ProductIdAndKey_OptionId(Long productId, Long optionId);
 
     List<SkuValues> findAllByKey_ProductId(Long productId);
+
+    Boolean deleteAllByKey_ProductId(Long productId);
 }

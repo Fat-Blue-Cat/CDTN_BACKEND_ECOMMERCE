@@ -119,12 +119,219 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+//    @Transactional
+//    @Override
+//    public void updateProduct(CreateProductRequest createProductRequest, Long id, MultipartFile[] multipartFiles, Long[] imageIdDelete) throws IOException {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm với id: " + id));
+//
+//
+//        Brand brand = brandRepository.findById(createProductRequest.getBrandId())
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy thương hiệu với id: " + createProductRequest.getBrandId()));
+//        Category category = categoryRepository.findById(createProductRequest.getCategoryId())
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy danh mục với id: " + createProductRequest.getCategoryId()));
+//
+//        Set<OptionRequestDto> optionRequestDto = mapstruct.stringToSet(createProductRequest.getOptionRequestDtoList(), OptionRequestDto.class);
+//        Set<VariantsRequestDto> variantsRequestDto = mapstruct.stringToSet(createProductRequest.getVariantsRequestDtoList(), VariantsRequestDto.class);
+//
+//        product.setTitle(createProductRequest.getTitle());
+//        product.setDescription(createProductRequest.getDescription());
+//        product.setDiscountPercent(createProductRequest.getDiscountPercent());
+//        product.setTotalQuantity(variantsRequestDto.stream().mapToInt(VariantsRequestDto::getQuantity).sum());
+//        product.setBrand(brand);
+//        product.setCategory(category);
+//        product.setCreateAt(LocalDateTime.now());
+//
+//        Product savedProduct = productRepository.save(product);
+//
+//        for (OptionRequestDto option : optionRequestDto) {
+//            Options currentOption = optionRepository.findById(option.getId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option với id: " + option.getId()));
+//
+//            currentOption.setName(option.getName());
+//            Options savedOption = optionRepository.save(currentOption);
+//            for (OptionValueRequestDto optionValueRequestDto : option.getProductOptionValues()) {
+//                OptionValues currentOptionValues = optionValuesRepository.findById(optionValueRequestDto.getId())
+//                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option value với id: " + optionValueRequestDto.getId()));
+//                currentOptionValues.setValue(optionValueRequestDto.getValue());
+//                currentOptionValues.setProductId(savedProduct.getId());
+//                OptionValues optionValuesSaved= optionValuesRepository.save(currentOptionValues);
+//            }
+//        }
+//
+//        for (VariantsRequestDto variant : variantsRequestDto) {
+//            ProductSkus currentVariant = productSkusRepository.findById(variant.getId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy biến thể với id: " + variant.getId()));
+////
+//            currentVariant.setSku(variant.getSku());
+//            currentVariant.setQuantity(variant.getQuantity());
+//            currentVariant.setPrice(variant.getPrice());
+//
+//            ProductSkus savedVariant = productSkusRepository.save(currentVariant);
+//
+//            ProductPriceHistory productPriceHistory = ProductPriceHistory.builder()
+//                    .price(variant.getPrice())
+//                    .effectiveDate(LocalDateTime.now())
+//                    .productSkus(savedVariant)
+//                    .build();
+//            productPriceHistoryRepository.save(productPriceHistory);
+////            for (OptionSelectRequestDto option: variant.getOptionSelectRequestDtoList()) {
+////                Options options = optionRepository.findByNameAndProductId(option.getNameOption(),savedProduct.getId());
+////                OptionValues optionValues = optionValuesRepository.findByValueAndOptionId(option.getValueOption(),options.getId());
+////                SkuValues skuValues = SkuValues.builder()
+////                        .key(KeySkuValues.builder().sku(savedVariant).option(options).productId(savedProduct.getId()).build()).optionValues(optionValues).build();
+////                SkuValues skuValuesSaved = skuValuesRepository.save(skuValues);
+////
+////            }
+//        }
+//
+//
+//
+//        // Xóa các hình ảnh cũ của sản phẩm
+//        if(imageIdDelete == null) return;
+//        for (Long imageId : imageIdDelete) {
+//            imageService.delete(imageId.intValue());
+//        }
+//        if (multipartFiles == null) {
+//            return;
+//        }
+//
+//        // Thêm các hình ảnh mới vào sản phẩm
+//        for (MultipartFile multipartFile : multipartFiles) {
+//            BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+//            if (bi == null) {
+//                throw new IOException("Hình ảnh không hợp lệ!");
+//            }
+//            Map result = cloudinaryService.upload(multipartFile);
+//            Image image = Image.builder()
+//                    .name((String) result.get("original_filename"))
+//                    .imageUrl((String) result.get("url"))
+//                    .imageId((String) result.get("public_id"))
+//                    .products(savedProduct)
+//                    .build();
+//            imageService.save(image);
+//        }
+//    }
+
+
+//    @Transactional
+//    @Override
+//    public void updateProduct(CreateProductRequest createProductRequest, Long id, MultipartFile[] multipartFiles, Long[] imageIdDelete) throws IOException {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm với id: " + id));
+//
+//        Brand brand = brandRepository.findById(createProductRequest.getBrandId())
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy thương hiệu với id: " + createProductRequest.getBrandId()));
+//        Category category = categoryRepository.findById(createProductRequest.getCategoryId())
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy danh mục với id: " + createProductRequest.getCategoryId()));
+//
+//        Set<OptionRequestDto> optionRequestDto = mapstruct.stringToSet(createProductRequest.getOptionRequestDtoList(), OptionRequestDto.class);
+//        Set<VariantsRequestDto> variantsRequestDto = mapstruct.stringToSet(createProductRequest.getVariantsRequestDtoList(), VariantsRequestDto.class);
+//
+//        product.setTitle(createProductRequest.getTitle());
+//        product.setDescription(createProductRequest.getDescription());
+//        product.setDiscountPercent(createProductRequest.getDiscountPercent());
+//        product.setTotalQuantity(variantsRequestDto.stream().mapToInt(VariantsRequestDto::getQuantity).sum());
+//        product.setBrand(brand);
+//        product.setCategory(category);
+//        product.setCreateAt(LocalDateTime.now());
+//
+//        Product savedProduct = productRepository.save(product);
+//
+//
+//
+//        for (OptionRequestDto option : optionRequestDto) {
+//            Options currentOption;
+//            if (option.getId() != null) {
+//                currentOption = optionRepository.findById(option.getId())
+//                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option với id: " + option.getId()));
+//                currentOption.setName(option.getName());
+//            } else {
+//                currentOption = Options.builder()
+//                        .name(option.getName())
+//                        .product(savedProduct)
+//                        .build();
+//            }
+//            Options savedOption = optionRepository.save(currentOption);
+//
+//            for (OptionValueRequestDto optionValueRequestDto : option.getProductOptionValues()) {
+//                OptionValues currentOptionValues;
+//                if (optionValueRequestDto.getId() != null) {
+//                    currentOptionValues = optionValuesRepository.findById(optionValueRequestDto.getId())
+//                            .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option value với id: " + optionValueRequestDto.getId()));
+//                    currentOptionValues.setValue(optionValueRequestDto.getValue());
+//                    currentOptionValues.setProductId(savedProduct.getId());
+//                } else {
+//                    currentOptionValues = OptionValues.builder()
+//                            .value(optionValueRequestDto.getValue())
+//                            .productId(savedProduct.getId())
+//                            .option(savedOption)
+//                            .build();
+//                }
+//                optionValuesRepository.save(currentOptionValues);
+//            }
+//        }
+//
+//        for (VariantsRequestDto variant : variantsRequestDto) {
+//            ProductSkus currentVariant;
+//            if (variant.getId() != null) {
+//                currentVariant = productSkusRepository.findById(variant.getId())
+//                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy biến thể với id: " + variant.getId()));
+//                currentVariant.setSku(variant.getSku());
+//                currentVariant.setQuantity(variant.getQuantity());
+//                currentVariant.setPrice(variant.getPrice());
+//            } else {
+//                currentVariant = ProductSkus.builder()
+//                        .sku(variant.getSku())
+//                        .quantity(variant.getQuantity())
+//                        .price(variant.getPrice())
+//                        .product(savedProduct)
+//                        .build();
+//            }
+//            ProductSkus savedVariant = productSkusRepository.save(currentVariant);
+//
+//            for (OptionSelectRequestDto option : variant.getOptionSelectRequestDtoList()) {
+//                Options options = optionRepository.findByNameAndProductId(option.getNameOption(), savedProduct.getId());
+//                OptionValues optionValues = optionValuesRepository.findByValueAndOptionId(option.getValueOption(), options.getId());
+//                SkuValues skuValues = SkuValues.builder()
+//                        .key(KeySkuValues.builder().sku(savedVariant).option(options).productId(savedProduct.getId()).build())
+//                        .optionValues(optionValues)
+//                        .build();
+//                skuValuesRepository.save(skuValues);
+//            }
+//        }
+//
+//        // Xóa các hình ảnh cũ của sản phẩm
+//        if (imageIdDelete != null) {
+//            for (Long imageId : imageIdDelete) {
+//                imageService.delete(imageId.intValue());
+//            }
+//        }
+//
+//        if (multipartFiles != null) {
+//            // Thêm các hình ảnh mới vào sản phẩm
+//            for (MultipartFile multipartFile : multipartFiles) {
+//                BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+//                if (bi == null) {
+//                    throw new IOException("Hình ảnh không hợp lệ!");
+//                }
+//                Map result = cloudinaryService.upload(multipartFile);
+//                Image image = Image.builder()
+//                        .name((String) result.get("original_filename"))
+//                        .imageUrl((String) result.get("url"))
+//                        .imageId((String) result.get("public_id"))
+//                        .products(savedProduct)
+//                        .build();
+//                imageService.save(image);
+//            }
+//        }
+//    }
+
     @Transactional
     @Override
     public void updateProduct(CreateProductRequest createProductRequest, Long id, MultipartFile[] multipartFiles, Long[] imageIdDelete) throws IOException {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm với id: " + id));
-
 
         Brand brand = brandRepository.findById(createProductRequest.getBrandId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy thương hiệu với id: " + createProductRequest.getBrandId()));
@@ -144,74 +351,120 @@ public class ProductServiceImpl implements ProductService {
 
         Product savedProduct = productRepository.save(product);
 
-        for (OptionRequestDto option : optionRequestDto) {
-            Options currentOption = optionRepository.findById(option.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option với id: " + option.getId()));
 
-            currentOption.setName(option.getName());
+
+        Set<Long> optionIds = optionRequestDto.stream()
+                .map(OptionRequestDto::getId)
+                .collect(Collectors.toSet());
+
+        optionRepository.findAllByProductId(product.getId()).stream()
+                .filter(option -> !optionIds.contains(option.getId()))
+                .forEach(option -> optionRepository.delete(option));
+
+        for (OptionRequestDto option : optionRequestDto) {
+            Options currentOption;
+            if (option.getId() != null) {
+                currentOption = optionRepository.findById(option.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option với id: " + option.getId()));
+                currentOption.setName(option.getName());
+            } else {
+                currentOption = Options.builder()
+                        .name(option.getName())
+                        .product(savedProduct)
+                        .build();
+            }
             Options savedOption = optionRepository.save(currentOption);
+
+            Set<Long> optionValueIds = option.getProductOptionValues().stream()
+                    .map(OptionValueRequestDto::getId)
+                    .collect(Collectors.toSet());
+
+            optionValuesRepository.findAllByOptionId(savedOption.getId()).stream()
+                    .filter(optionValue -> !optionValueIds.contains(optionValue.getId()))
+                    .forEach(optionValue -> optionValuesRepository.delete(optionValue));
+
             for (OptionValueRequestDto optionValueRequestDto : option.getProductOptionValues()) {
-                OptionValues currentOptionValues = optionValuesRepository.findById(optionValueRequestDto.getId())
-                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option value với id: " + optionValueRequestDto.getId()));
-                currentOptionValues.setValue(optionValueRequestDto.getValue());
-                currentOptionValues.setProductId(savedProduct.getId());
-                OptionValues optionValuesSaved= optionValuesRepository.save(currentOptionValues);
+                OptionValues currentOptionValues;
+                if (optionValueRequestDto.getId() != null) {
+                    currentOptionValues = optionValuesRepository.findById(optionValueRequestDto.getId())
+                            .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy option value với id: " + optionValueRequestDto.getId()));
+                    currentOptionValues.setValue(optionValueRequestDto.getValue());
+                    currentOptionValues.setProductId(savedProduct.getId());
+                } else {
+                    currentOptionValues = OptionValues.builder()
+                            .value(optionValueRequestDto.getValue())
+                            .productId(savedProduct.getId())
+                            .option(savedOption)
+                            .build();
+                }
+                optionValuesRepository.save(currentOptionValues);
             }
         }
+
+        // Xử lý các biến thể
+        Set<Long> variantIds = variantsRequestDto.stream()
+                .map(VariantsRequestDto::getId)
+                .collect(Collectors.toSet());
+
+        productSkusRepository.findAllByProductId(product.getId()).stream()
+                .filter(variant -> !variantIds.contains(variant.getId()))
+                .forEach(variant -> productSkusRepository.delete(variant));
 
         for (VariantsRequestDto variant : variantsRequestDto) {
-            ProductSkus currentVariant = productSkusRepository.findById(variant.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy biến thể với id: " + variant.getId()));
-//
-            currentVariant.setSku(variant.getSku());
-            currentVariant.setQuantity(variant.getQuantity());
-            currentVariant.setPrice(variant.getPrice());
-
+            ProductSkus currentVariant;
+            if (variant.getId() != null) {
+                currentVariant = productSkusRepository.findById(variant.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy biến thể với id: " + variant.getId()));
+                currentVariant.setSku(variant.getSku());
+                currentVariant.setQuantity(variant.getQuantity());
+                currentVariant.setPrice(variant.getPrice());
+            } else {
+                currentVariant = ProductSkus.builder()
+                        .sku(variant.getSku())
+                        .quantity(variant.getQuantity())
+                        .price(variant.getPrice())
+                        .product(savedProduct)
+                        .build();
+            }
             ProductSkus savedVariant = productSkusRepository.save(currentVariant);
 
-            ProductPriceHistory productPriceHistory = ProductPriceHistory.builder()
-                    .price(variant.getPrice())
-                    .effectiveDate(LocalDateTime.now())
-                    .productSkus(savedVariant)
-                    .build();
-            productPriceHistoryRepository.save(productPriceHistory);
-//            for (OptionSelectRequestDto option: variant.getOptionSelectRequestDtoList()) {
-//                Options options = optionRepository.findByNameAndProductId(option.getNameOption(),savedProduct.getId());
-//                OptionValues optionValues = optionValuesRepository.findByValueAndOptionId(option.getValueOption(),options.getId());
-//                SkuValues skuValues = SkuValues.builder()
-//                        .key(KeySkuValues.builder().sku(savedVariant).option(options).productId(savedProduct.getId()).build()).optionValues(optionValues).build();
-//                SkuValues skuValuesSaved = skuValuesRepository.save(skuValues);
-//
-//            }
+            for (OptionSelectRequestDto option : variant.getOptionSelectRequestDtoList()) {
+                Options options = optionRepository.findByNameAndProductId(option.getNameOption(), savedProduct.getId());
+                OptionValues optionValues = optionValuesRepository.findByValueAndOptionId(option.getValueOption(), options.getId());
+                SkuValues skuValues = SkuValues.builder()
+                        .key(KeySkuValues.builder().sku(savedVariant).option(options).productId(savedProduct.getId()).build())
+                        .optionValues(optionValues)
+                        .build();
+                skuValuesRepository.save(skuValues);
+            }
         }
-
-
 
         // Xóa các hình ảnh cũ của sản phẩm
-        if(imageIdDelete == null) return;
-        for (Long imageId : imageIdDelete) {
-            imageService.delete(imageId.intValue());
-        }
-        if (multipartFiles == null) {
-            return;
+        if (imageIdDelete != null) {
+            for (Long imageId : imageIdDelete) {
+                imageService.delete(imageId.intValue());
+            }
         }
 
-        // Thêm các hình ảnh mới vào sản phẩm
-        for (MultipartFile multipartFile : multipartFiles) {
-            BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
-            if (bi == null) {
-                throw new IOException("Hình ảnh không hợp lệ!");
+        if (multipartFiles != null) {
+            // Thêm các hình ảnh mới vào sản phẩm
+            for (MultipartFile multipartFile : multipartFiles) {
+                BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+                if (bi == null) {
+                    throw new IOException("Hình ảnh không hợp lệ!");
+                }
+                Map result = cloudinaryService.upload(multipartFile);
+                Image image = Image.builder()
+                        .name((String) result.get("original_filename"))
+                        .imageUrl((String) result.get("url"))
+                        .imageId((String) result.get("public_id"))
+                        .products(savedProduct)
+                        .build();
+                imageService.save(image);
             }
-            Map result = cloudinaryService.upload(multipartFile);
-            Image image = Image.builder()
-                    .name((String) result.get("original_filename"))
-                    .imageUrl((String) result.get("url"))
-                    .imageId((String) result.get("public_id"))
-                    .products(savedProduct)
-                    .build();
-            imageService.save(image);
         }
     }
+
 
 
 

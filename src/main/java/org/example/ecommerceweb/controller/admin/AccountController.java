@@ -49,5 +49,24 @@ public class AccountController {
         }
     }
 
+    @PutMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam Long userId) {
+        try {
+            return ResponseEntity.ok(accountService.resetPassword(userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?> deleteAccount(@PathVariable Long userId) {
+        try {
+            accountService.deleteAccount(userId);
+            return ResponseEntity.ok("Account deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }

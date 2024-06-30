@@ -44,7 +44,9 @@ public class CategoryController {
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam(required = false) MultipartFile multipartFile, @RequestParam String name) throws IOException {
         try{
-
+            if(multipartFile.isEmpty()){
+                multipartFile = null;
+            }
             return new ResponseEntity<>( categoryService.createCategory(multipartFile,name), HttpStatus.OK);
         }catch (IOException e) {
             return new ResponseEntity<>("Failed to upload image", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,7 +54,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestParam(required = false,defaultValue = "null") MultipartFile multipartFile, @RequestParam String name, @PathVariable("id") Long id){
+    public ResponseEntity<?> update(@RequestParam(required = false) MultipartFile multipartFile, @RequestParam String name, @PathVariable("id") Long id){
         if (multipartFile == null || multipartFile.isEmpty()) {
             multipartFile = null; // or handle it in a way that suits your needs
         }

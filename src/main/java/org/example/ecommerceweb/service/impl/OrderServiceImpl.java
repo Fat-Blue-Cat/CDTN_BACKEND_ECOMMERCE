@@ -181,6 +181,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order updateOrderStatus(Long orderId, String status) throws OrderException {
+        switch (status){
+            case Constant.ORDER_PLACED:
+                return placedOrder(orderId);
+            case Constant.ORDER_CONFIRMED:
+                return confirmedOrder(orderId);
+            case Constant.ORDER_SHIPPED:
+                return shippedOrder(orderId);
+            case Constant.ORDER_DELIVERED:
+                return deliveredOrder(orderId);
+            case Constant.ORDER_CANCELLED:
+                return canceledOrder(orderId);
+        }
+
+        return null;
+    }
+
+    @Override
     public void deleteOrder(Long orderId) throws OrderException {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
 

@@ -29,4 +29,6 @@ public class Constant {
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_USER = "ROLE_USER";
+
+    public static final String NOTIFY_PASSWORD = "Mật khẩu đã được đặt lại thành công: 12345678";
 }
