@@ -176,6 +176,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order completedOrder(Long orderId) throws OrderException {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderException("Order not found"));
+
+        order.setOrderStatus(Constant.ORDER_COMPLETED);
+
+        return orderRepository.save(order);
+    }
+
+    @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
@@ -193,6 +202,8 @@ public class OrderServiceImpl implements OrderService {
                 return deliveredOrder(orderId);
             case Constant.ORDER_CANCELLED:
                 return canceledOrder(orderId);
+            case Constant.ORDER_COMPLETED:
+                return completedOrder(orderId);
         }
 
         return null;

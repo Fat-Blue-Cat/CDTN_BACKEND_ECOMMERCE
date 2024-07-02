@@ -27,27 +27,27 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT count(id) " +
             "FROM orders " +
             "WHERE order_date >= current_date - 30 " +
-            "AND order_date < current_date", nativeQuery = true)
+            "AND order_date <= current_date", nativeQuery = true)
     Long getAllOrderIn30Days();
 
     @Query(value = "SELECT sum(total_discouted_price) " +
             "FROM orders " +
             "WHERE order_date >= current_date - 30 " +
-            "AND order_date < current_date", nativeQuery = true)
+            "AND order_date <= current_date", nativeQuery = true)
     BigDecimal getTotalRevenueIn30Days();
 
 
     @Query(value = "SELECT count(id) " +
             "FROM orders " +
             "WHERE order_date >= current_date - 30 " +
-            "AND order_date < current_date " +
+            "AND order_date <= current_date " +
             "AND order_status = 'CANCELLED'",nativeQuery = true)
     Long getTotalOrderCancelIn30Days();
 
     @Query(value = "SELECT count(id) " +
             "FROM users " +
             "WHERE created_at >= current_date - 30 " +
-            "AND created_at < current_date", nativeQuery = true)
+            "AND created_at <= current_date", nativeQuery = true)
     Long getTotalUserIn30Days();
 
 
